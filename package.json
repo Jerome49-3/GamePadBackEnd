@@ -1,5 +1,5 @@
 {
-  "name": "GamePod",
+  "name": "gamepod",
   "version": "1.0.0",
   "description": "simple replica of https://rawg.io/",
   "main": "index.js",
