@@ -4,17 +4,58 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/games", async (req, res) => {
-  let search = req.query.search || "";
+  let { search, search_exact, page, platforms, genres, ordering } = req?.query;
+  console.log("req.query:", req?.query);
+  console.log(
+    "search:",
+    "\n",
+    "search_exact:",
+    "\n",
+    "page:",
+    "\n",
+    "platforms:",
+    "\n",
+    "genres:",
+    "\n",
+    "ordering:",
+    "\n",
+    search,
+    search_exact,
+    page,
+    platforms,
+    genres,
+    ordering
+  );
+
+  search = req.query.search || "";
   // console.log("search:", search);
-  let search_exact = req.query.search_exact || "";
+  search_exact = req.query.search_exact || "";
   // console.log("search_exact:", search_exact);
-  let dates = req.query.dates || "";
+  dates = req.query.dates || "";
   // console.log("dates on /games:", dates);
-  let page = req.query.page || "";
+  page = req.query.page || "";
   // console.log("page:", page);
+  platforms = req?.query?.platforms || "";
+
+  genres = req?.query?.genres || "";
+
+  ordering = req?.query?.ordering || "";
+
   if (page <= 0) {
     page = 1;
   }
+
+  if (req?.query?.platforms === "All") {
+    platforms === "";
+  }
+
+  if (req?.query?.genres === "All") {
+    genres === "";
+  }
+  if (req?.query?.ordering === "Default") {
+    ordering === "";
+  }
+
   // console.log("page after if:", page);
   // let ordering = req.query.ordering || "";
   // console.log("ordering:", ordering);
@@ -30,20 +71,37 @@ router.get("/games", async (req, res) => {
   // console.log("search.length:", search.length);
   // const limit = req.query.limit || 100;
   // const skip = req.query.skip || 0;
-  // return res.status(200).json({ message: "je suis sur la route /games" });
   try {
     // console.log("dates in try on /games:", dates);
     const response = await axios.get(
       `https://api.rawg.io/api/games?key=${process.env.API_KEY}&page=${page}&dates=${dates}&search=${search}&search_exact=${search_exact}`
     );
+    //     const response = await axios.get(
+    //   `https://api.rawg.io/api/games?key=${process.env.API_KEY}&page=${page}&dates=${dates}&search=${search}&search_exact=${search_exact}&platforms=${platforms}&genres=${genres}&ordering=${ordering}`
+    // );
+    console.log(
+      "%Response.count on games: ",
+      "color: red",
+      response?.data?.count
+    );
+    console.log(
+      "%Response.results on games: ",
+      "color: red",
+      response?.data?.results
+    );
+
     // const response = await axios.get(
     //   `https://api.rawg.io/api/games?key=${process.env.API_KEY}&page=${page}&ordering=${ordering}&dates=${dates}&search=${search}`
     // );
     if (response) {
-      return res.status(200).json(response.data);
+      return res.status(200).json(response?.data);
     }
   } catch (error) {
-    console.log("error on /games:", error.response);
+    console.group("Error on /games:", error);
+    console.log("Error.response.status:", error?.response?.status);
+    console.log("Error.response.statusText:", error?.response?.statusText);
+    console.log("error.response.data:", error?.response?.data);
+    console.groupEnd();
   }
 });
 
