@@ -1,11 +1,23 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI);
 const cloudinary = require("cloudinary").v2;
-
 const app = express();
+
+//*********** CONFIG CORS ***********//
+const cors = require("cors");
+console.log(
+  "process.env.URL_CORS_FRONTEND CORS on index.js:",
+  process.env.URL_CORS_FRONTEND
+);
+app.use(
+  cors({
+    origin: process.env.URL_CORS_FRONTEND,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 app.use(cors());
 app.use(express.json());
 
