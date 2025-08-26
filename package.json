@@ -1,6 +1,7 @@
 {
   "name": "gamepod",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "simple replica of https://rawg.io/",
   "main": "index.js",
   "dependencies": {
